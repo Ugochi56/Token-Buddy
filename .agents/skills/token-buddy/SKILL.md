@@ -1,14 +1,14 @@
 ---
-name: token-budget
+name: token-buddy
 description: >-
-  Adaptive token and compute budgeting for Antigravity. Use when optimizing
-  token usage, checking accessible models and remaining model quotas, measuring
-  lifetime/recent token burn from local transcripts, locating a user's .gemini
-  config directory across OSes, or routing sub-tasks to cheaper subagent models
-  (flash_lite/flash) based on request complexity and quota pressure.
+  Token Buddy: adaptive token and compute budgeting for Antigravity. Use when
+  optimizing token usage, checking accessible models and remaining model quotas,
+  measuring lifetime/recent token burn from local transcripts, locating a user's
+  .gemini config directory across OSes, or routing sub-tasks to cheaper subagent
+  models (flash_lite/flash) based on request complexity and quota pressure.
 ---
 
-# Adaptive Token Budget
+# Token Buddy
 
 Match model tier, context size, and compute spend to both **request complexity**
 and **live remaining quota**.

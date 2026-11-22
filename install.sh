@@ -4,7 +4,7 @@
 
 set -eu
 
-RAW_BASE="https://raw.githubusercontent.com/Ugochi56/Token-Buddy/main/.agents/skills/token-budget"
+RAW_BASE="https://raw.githubusercontent.com/Ugochi56/Token-Buddy/main/.agents/skills/token-buddy"
 
 # Auto-detect .gemini root
 GEMINI_ROOT=""
@@ -18,7 +18,8 @@ done
 [ -n "$GEMINI_ROOT" ] || GEMINI_ROOT="$HOME/.gemini"
 
 CONFIG_DIR="$GEMINI_ROOT/config"
-DEST="$CONFIG_DIR/skills/token-budget"
+rm -rf "$CONFIG_DIR/skills/token-budget"
+DEST="$CONFIG_DIR/skills/token-buddy"
 mkdir -p "$DEST/scripts" "$DEST/references"
 
 echo "Installing Token Buddy into $DEST ..."
@@ -39,7 +40,7 @@ block = f"""{start}
 - **Match compute to complexity**: Keep T0/T1 answers brief; escalate only when needed.
 - **Delegate bulk work**: Use `invoke_subagent` with `Model: "flash_lite"` for file/symbol scans & log summaries, and `Model: "flash"` for multi-file research (`research`). Require compact bullet returns (`file:line` refs, no raw file dumps).
 - **Lean context & cache protection**: Read targeted line ranges (`StartLine`/`EndLine`), filter noisy shell output, keep raw dumps inside subagents, and proactively suggest `/compact` every ~40 steps, before switching models, or when starting a new feature.
-- **Token usage & quotas**: Whenever the user asks about token usage, burn, model quotas, or Token Buddy, use the `token-budget` skill (`swarm(action="models", all=True)` + `locate_gemini.py --burn`), save live quotas to `<gemini>/config/token_budget_quotas.json`, and report the live summary.
+- **Token usage & quotas**: Whenever the user asks about token usage, burn, model quotas, or Token Buddy, use the `token-buddy` skill (`swarm(action="models", all=True)` + `locate_gemini.py --burn`), save live quotas to `<gemini>/config/token_budget_quotas.json`, and report the live summary.
 {end}"""
 
 existing = p.read_text(encoding="utf-8") if p.is_file() else ""

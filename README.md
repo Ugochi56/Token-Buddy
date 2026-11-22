@@ -65,7 +65,7 @@ npx skills add Ugochi56/Token-Buddy
 
 The one-line installer automatically:
 1. Locates your `.gemini` directory on Windows, macOS, or Linux.
-2. Installs the `token-budget` skill globally to `<gemini>/config/skills/token-budget/`.
+2. Installs the `token-buddy` skill globally to `<gemini>/config/skills/token-buddy/`.
 3. Adds a tiny (~130-token) always-on rule to `<gemini>/config/GEMINI.md` so Token Buddy **runs automatically in every chat** and answers whenever you ask about your token usage or quotas.
 4. Creates the `token-buddy` CLI command in `~/.local/bin/` and launches your dashboard immediately.
 
@@ -88,18 +88,18 @@ token-buddy --no-color
 Or run directly with Python:
 
 ```bash
-python ~/.gemini/config/skills/token-budget/scripts/dashboard.py --watch 5
+python ~/.gemini/config/skills/token-buddy/scripts/dashboard.py --watch 5
 ```
 
 ## Other CLI Utilities
 
 ```bash
 # Print detected .gemini paths (JSON)
-python .agents/skills/token-budget/scripts/locate_gemini.py
+python .agents/skills/token-buddy/scripts/locate_gemini.py
 
 # Full JSON burn report (lifetime, 7d, 24h, per-model)
-python .agents/skills/token-budget/scripts/locate_gemini.py --burn
+python .agents/skills/token-buddy/scripts/locate_gemini.py --burn
 
 # Audit always-on rules, skills, plugins, and MCP prompt overhead
-python .agents/skills/token-budget/scripts/locate_gemini.py --audit
+python .agents/skills/token-buddy/scripts/locate_gemini.py --audit
 ```

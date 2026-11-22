@@ -22,7 +22,7 @@ import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent
-SKILL_SRC = REPO_ROOT / ".agents" / "skills" / "token-budget"
+SKILL_SRC = REPO_ROOT / ".agents" / "skills" / "token-buddy"
 SCRIPTS_DIR = SKILL_SRC / "scripts"
 sys.path.insert(0, str(SCRIPTS_DIR))
 
@@ -35,7 +35,7 @@ RULE_BLOCK = f"""{RULE_START}
 - **Match compute to complexity**: Keep T0/T1 answers brief; escalate only when needed.
 - **Delegate bulk work**: Use `invoke_subagent` with `Model: "flash_lite"` for file/symbol scans & log summaries, and `Model: "flash"` for multi-file research (`research`). Require compact bullet returns (`file:line` refs, no raw file dumps).
 - **Lean context & cache protection**: Read targeted line ranges (`StartLine`/`EndLine`), filter noisy shell output, keep raw dumps inside subagents, and proactively suggest `/compact` every ~40 steps, before switching models, or when starting a new feature.
-- **Token usage & quotas**: Whenever the user asks about token usage, burn, model quotas, or Token Buddy, use the `token-budget` skill (`swarm(action="models", all=True)` + `locate_gemini.py --burn`), save live quotas to `<gemini>/config/token_budget_quotas.json`, and report the live summary.
+- **Token usage & quotas**: Whenever the user asks about token usage, burn, model quotas, or Token Buddy, use the `token-buddy` skill (`swarm(action="models", all=True)` + `locate_gemini.py --burn`), save live quotas to `<gemini>/config/token_budget_quotas.json`, and report the live summary.
 {RULE_END}"""
 
 
@@ -92,9 +92,12 @@ def install() -> int:
     info = lg.locate_gemini()
     config_dir = Path(str(info["config_dir"]))
     skills_dir = Path(str(info["skills_dir"]))
-    dest = skills_dir / "token-budget"
+    dest = skills_dir / "token-buddy"
+    legacy = skills_dir / "token-budget"
 
     skills_dir.mkdir(parents=True, exist_ok=True)
+    if legacy.exists():
+        shutil.rmtree(legacy)
     if dest.exists():
         shutil.rmtree(dest)
     shutil.copytree(SKILL_SRC, dest)
@@ -121,12 +124,11 @@ def install() -> int:
 def uninstall() -> int:
     info = lg.locate_gemini()
     config_dir = Path(str(info["config_dir"]))
-    dest = Path(str(info["skills_dir"])) / "token-budget"
-    if dest.exists():
-        shutil.rmtree(dest)
-        print(f"Removed skill: {dest}")
-    else:
-        print(f"Skill not found at {dest}")
+    for name in ("token-buddy", "token-budget"):
+        dest = Path(str(info["skills_dir"])) / name
+        if dest.exists():
+            shutil.rmtree(dest)
+            print(f"Removed skill: {dest}")
 
     _remove_global_rule(config_dir)
     print(f"Cleaned always-on rule from: {config_dir / 'GEMINI.md'}")

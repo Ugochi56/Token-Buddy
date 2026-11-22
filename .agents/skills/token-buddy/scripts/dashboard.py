@@ -177,7 +177,7 @@ def load_quotas(info: dict, explicit_path: str | None) -> tuple[dict | None, str
     if explicit_path:
         candidates.append(Path(explicit_path))
     candidates.append(Path(str(info["config_dir"])) / "token_budget_quotas.json")
-    candidates.append(Path(str(info["skills_dir"])) / "token-budget" / ".quotas_cache.json")
+    candidates.append(Path(str(info["skills_dir"])) / "token-buddy" / ".quotas_cache.json")
     candidates.append(SCRIPT_DIR.parent / ".quotas_cache.json")
 
     for p in candidates:
@@ -296,7 +296,7 @@ def render_dashboard(
     logo2 = f"{t.accent}{t.bold} ( o.o ) {t.reset}"
     logo3 = f"{t.peach}{t.bold}  > ^ <  {t.reset}"
 
-    out.append(box_line(f"{logo1} {t.accent}{t.bold}ANTIGRAVITY TOKEN BUDGET{t.reset}", inner_w, t))
+    out.append(box_line(f"{logo1} {t.accent}{t.bold}TOKEN BUDDY (ANTIGRAVITY){t.reset}", inner_w, t))
     out.append(box_line(f"{logo2} {status}", inner_w, t))
     out.append(box_line(f"{logo3} {t.muted}{info['gemini_root']}{t.reset}", inner_w, t))
     out.append(sep)
