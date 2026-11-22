@@ -143,6 +143,16 @@ def _finalize_bucket(b: dict[str, int]) -> dict:
     }
 
 
+def _fmt_short(n: int) -> str:
+    if n >= 1_000_000_000:
+        return f"{n / 1_000_000_000:.2f}B"
+    if n >= 1_000_000:
+        return f"{n / 1_000_000:.1f}M"
+    if n >= 1_000:
+        return f"{n / 1_000:.1f}K"
+    return str(n)
+
+
 def compute_burn(info: dict[str, str | bool | None]) -> dict:
     """Scan local Antigravity transcripts to compute lifetime & recent token burn."""
     brain_dir = Path(str(info["brain_dir"]))
@@ -213,16 +223,27 @@ def compute_burn(info: dict[str, str | bool | None]) -> dict:
         )
     }
 
+    lf_final = _finalize_bucket(lifetime)
+    d7_final = _finalize_bucket(last_7d)
+    d1_final = _finalize_bucket(last_24h)
+    plain_summary = (
+        f"Last 24h: {_fmt_short(d1_final['uncached_burn_tokens'])} real tokens burned "
+        f"({d1_final['cache_hit_rate_pct']:.0f}% cached, ~{_fmt_short(d1_final['avg_uncached_per_step'])}/step) | "
+        f"All-time: {_fmt_short(lf_final['uncached_burn_tokens'])} real tokens across {convs_scanned} chats "
+        f"({lf_final['cache_hit_rate_pct']:.0f}% saved by cache)"
+    )
+
     return {
+        "summary": plain_summary,
         "brain_dir": str(brain_dir),
         "conversations_scanned": convs_scanned,
         "date_range": {
             "first": first_ts.isoformat() if first_ts else None,
             "last": last_ts.isoformat() if last_ts else None,
         },
-        "lifetime": _finalize_bucket(lifetime),
-        "last_7d": _finalize_bucket(last_7d),
-        "last_24h": _finalize_bucket(last_24h),
+        "lifetime": lf_final,
+        "last_7d": d7_final,
+        "last_24h": d1_final,
         "by_model": per_model,
     }
 
@@ -332,7 +353,19 @@ def build_plan(quotas_payload: dict, burn_summary: dict | None = None) -> dict:
         },
     }
 
+    top_heavy = recommendations["T3_complex"]["recommended_models"][0] if recommendations["T3_complex"]["recommended_models"] else "inherit"
+    plan_summary = (
+        f"{len(available)}/{len(models)} models ready ({overall_pressure}) | "
+        f"Use flash_lite/flash for quick & scoped tasks, {top_heavy} for complex work"
+    )
+    if burn_summary:
+        plan_summary += (
+            f" | {burn_summary['lifetime']['cache_hit_rate_pct']:.0f}% cached, "
+            f"~{_fmt_short(burn_summary['last_24h']['avg_uncached_per_step'])} real tokens/step (24h)"
+        )
+
     result: dict = {
+        "summary": plan_summary,
         "total_accessible_models": len(models),
         "available_models_count": len(available),
         "overall_pressure": overall_pressure,

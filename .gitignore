@@ -5,4 +5,5 @@ Thumbs.db
 .env
 .quotas_cache.json
 token_budget_quotas.json
+token_buddy_quotas.json
 *.zip

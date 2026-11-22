@@ -176,6 +176,7 @@ def load_quotas(info: dict, explicit_path: str | None) -> tuple[dict | None, str
     candidates: list[Path] = []
     if explicit_path:
         candidates.append(Path(explicit_path))
+    candidates.append(Path(str(info["config_dir"])) / "token_buddy_quotas.json")
     candidates.append(Path(str(info["config_dir"])) / "token_budget_quotas.json")
     candidates.append(Path(str(info["skills_dir"])) / "token-buddy" / ".quotas_cache.json")
     candidates.append(SCRIPT_DIR.parent / ".quotas_cache.json")

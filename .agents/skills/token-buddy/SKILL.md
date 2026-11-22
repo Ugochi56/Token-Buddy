@@ -43,8 +43,9 @@ python scripts/dashboard.py
 ```
 
 When you fetch live quotas via `swarm(action="models", all=True)`, save the JSON
-to `<gemini>/config/token_budget_quotas.json` so `dashboard.py` displays live
-quota pools and routing recommendations automatically.
+to `<gemini>/config/token_buddy_quotas.json` so `dashboard.py` displays live
+quota pools and routing recommendations automatically. When reporting usage to
+the user, lead with the plain-English `summary` line from `--burn` / `--plan`.
 
 ## 2. Classify Request Complexity & Apply Quota Pressure
 
