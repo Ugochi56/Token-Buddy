@@ -38,7 +38,7 @@ block = f"""{start}
 ## Token Buddy (Always-On Token Discipline)
 - **Match compute to complexity**: Keep T0/T1 answers brief; escalate only when needed.
 - **Delegate bulk work**: Use `invoke_subagent` with `Model: "flash_lite"` for file/symbol scans & log summaries, and `Model: "flash"` for multi-file research (`research`). Require compact bullet returns (`file:line` refs, no raw file dumps).
-- **Lean context**: Read targeted line ranges (`StartLine`/`EndLine`), filter noisy shell output, and suggest `/compact` in long chats or before switching models.
+- **Lean context & cache protection**: Read targeted line ranges (`StartLine`/`EndLine`), filter noisy shell output, keep raw dumps inside subagents, and proactively suggest `/compact` every ~40 steps, before switching models, or when starting a new feature.
 - **Token usage & quotas**: Whenever the user asks about token usage, burn, model quotas, or Token Buddy, use the `token-budget` skill (`swarm(action="models", all=True)` + `locate_gemini.py --burn`), save live quotas to `<gemini>/config/token_budget_quotas.json`, and report the live summary.
 {end}"""
 

@@ -432,6 +432,35 @@ def render_dashboard(
                 )
             )
 
+    # Smart Fresh-Input / Quota Alerts
+    alerts: list[str] = []
+    if active and active["steps"] >= 45:
+        alerts.append(
+            f"Chat #{active['conv_id']} is at {active['steps']} steps -> run /compact to avoid cache-miss spikes"
+        )
+    if plan:
+        low_pools = [p for p in plan["quota_pools"] if 0 < p["quota_remaining_pct"] < 35]
+        high_pools = [p for p in plan["quota_pools"] if p["quota_remaining_pct"] >= 80]
+        if low_pools and high_pools:
+            lp = low_pools[0]
+            hp = high_pools[0]
+            alerts.append(
+                f"{friendly_pool_name(lp['models'])} at {lp['quota_remaining_pct']}% -> shift heavy tasks to {friendly_pool_name(hp['models'])}"
+            )
+    plugins_dir = Path(str(info["plugins_dir"]))
+    if plugins_dir.is_dir():
+        p_count = sum(1 for p in plugins_dir.iterdir() if p.is_dir())
+        if p_count > 5:
+            alerts.append(f"{p_count} global plugins installed -> disable unused ones to cut base prompt")
+
+    if alerts:
+        out.append(sep)
+        out.append(box_line(f"{t.amber}{t.bold}SAVINGS ALERTS{t.reset}", inner_w, t))
+        for msg in alerts[:3]:
+            if len(msg) > inner_w - 4:
+                msg = msg[: inner_w - 7] + "..."
+            out.append(box_line(f"{t.amber}[!]{t.reset} {t.white}{msg}{t.reset}", inner_w, t))
+
     out.append(top)
     hint = (
         f"  {t.muted}{burn['conversations_scanned']} chats scanned | "

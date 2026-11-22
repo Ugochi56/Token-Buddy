@@ -72,4 +72,19 @@ Always set `Model` explicitly in `invoke_subagent`:
 
 Every subagent prompt MUST enforce a compact return contract (e.g., *max 10
 bullets with `file:line` refs; no raw file dumps*) so parent context stays lean.
-Suggest `/compact` when switching phases in long sessions.
+
+## 4. Cut Fresh Uncached Input Spikes (Cache-Miss Protection)
+
+Fresh input (not output) is usually 85–95% of real quota burn. Protect against it:
+
+- **Auto-suggest `/compact`**: Prompt the user to run `/compact` every ~40 steps,
+  before switching models (which breaks the prompt cache), or before starting a
+  new phase/feature in the same chat.
+- **Keep raw dumps out of main chat**: Offload multi-file reads and log scans to
+  `flash_lite`/`flash` subagents so bulky tool output stays in throwaway subagent
+  context instead of inflating the parent chat's history.
+- **Read slices & filter logs**: Always use `StartLine`/`EndLine` and pipe noisy
+  shell commands through `Select-Object -First` / `head` / `grep`.
+- **Flag prompt bloat**: When running `--audit` or reporting usage, flag high
+  plugin counts (>5 global plugins) and long chats (>45 steps) driving cache-miss
+  spikes.
