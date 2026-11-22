@@ -38,26 +38,29 @@ Adaptive token & compute budgeting skill + colorful ASCII live CLI dashboard for
 - **Complexity-based model tiering (`T0`–`T3`)**: Routes bulk file scanning and routine research to `flash_lite` / `flash` subagents with compact return contracts, reserving flagship models for core reasoning.
 - **Colorful ASCII CLI dashboard**: 24-bit TrueColor ANSI terminal UI with `--watch` live refresh and `--details` per-model breakdown.
 
-## Quick Install
+## Quick Install (1 Command — No Git Clone Needed)
 
-Requires **Python 3.10+** (no third-party packages).
+Requires **Python 3.10+** (zero third-party packages).
 
-```bash
-git clone https://github.com/Ugochi56/Token-Buddy.git token-buddy
-cd token-buddy
-python install.py
+### Windows (PowerShell)
+```powershell
+irm https://raw.githubusercontent.com/Ugochi56/Token-Buddy/main/install.ps1 | iex
 ```
 
-`install.py` automatically:
+### macOS / Linux
+```bash
+curl -fsSL https://raw.githubusercontent.com/Ugochi56/Token-Buddy/main/install.sh | sh
+```
+
+### Skill Only (`npx skills`)
+```bash
+npx skills add Ugochi56/Token-Buddy
+```
+
+The one-line installer automatically:
 1. Locates your `.gemini` directory on Windows, macOS, or Linux.
 2. Installs the `token-budget` skill globally to `<gemini>/config/skills/token-budget/`.
-3. Creates a `token-buddy` launcher in `~/.local/bin/`.
-
-To uninstall:
-
-```bash
-python install.py --uninstall
-```
+3. Creates the `token-buddy` CLI command in `~/.local/bin/`.
 
 ## CLI Dashboard Usage
 
