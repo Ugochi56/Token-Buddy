@@ -66,7 +66,8 @@ npx skills add Ugochi56/Token-Buddy
 The one-line installer automatically:
 1. Locates your `.gemini` directory on Windows, macOS, or Linux.
 2. Installs the `token-budget` skill globally to `<gemini>/config/skills/token-budget/`.
-3. Creates the `token-buddy` CLI command in `~/.local/bin/`.
+3. Adds a tiny (~130-token) always-on rule to `<gemini>/config/GEMINI.md` so Token Buddy **runs automatically in every chat** and answers whenever you ask about your token usage or quotas.
+4. Creates the `token-buddy` CLI command in `~/.local/bin/` and launches your dashboard immediately.
 
 ## CLI Dashboard Usage
 
