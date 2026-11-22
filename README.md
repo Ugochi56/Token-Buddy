@@ -43,7 +43,7 @@ Adaptive token & compute budgeting skill + colorful ASCII live CLI dashboard for
 Requires **Python 3.10+** (no third-party packages).
 
 ```bash
-git clone <your-repo-url> token-buddy
+git clone https://github.com/Ugochi56/Token-Buddy.git token-buddy
 cd token-buddy
 python install.py
 ```
