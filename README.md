@@ -1,6 +1,12 @@
-# Token Buddy
+<p align="center">
+  <img src="assets/token-buddy-banner.webp" alt="Token Buddy" width="720" />
+</p>
 
-Adaptive token & compute budgeting skill + colorful ASCII live CLI dashboard for **Google Antigravity**.
+<h1 align="center">Token Buddy</h1>
+
+<p align="center">
+  Adaptive token &amp; compute budgeting skill + colorful ASCII live CLI dashboard for <strong>Google Antigravity</strong>.
+</p>
 
 ```text
   +--------------------------------------------------------------------+
